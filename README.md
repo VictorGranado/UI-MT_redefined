@@ -56,6 +56,27 @@ The goal of this phase is to build a dependable **base platform first**. More ad
 
 ---
 
+## Design Inspiration
+
+This project is heavily inspired by handheld devices from the 2000s and the pre-smartphone era.
+
+What stands out to me about those devices is that they were often minimalist, focused, and genuinely useful. They were not trying to be everything at once. They provided direct interfaces, practical tools, and a form factor that encouraged real-world use instead of constant distraction.
+
+That idea is central to UI-MT.
+
+Rather than designing this project as a mini smartphone, I want it to feel more like a dedicated handheld instrument: simple, purposeful, tactile, and reliable. The interface should be clean and effective. Navigation should be understandable. Features should exist because they are useful, not because they are flashy.
+
+The inspiration from older handheld systems influences both the hardware and software direction of the project:
+
+- a compact self-contained device
+- a focused UI with clear tool access
+- offline-first usefulness
+- touch and button interaction
+- lightweight feedback through visuals and sound
+- practical features such as logging, journaling, scanning, and file access
+
+UI-MT is meant to carry forward that older design philosophy into a modern DIY embedded platform.
+
 ## Locked Scope
 
 ### Included Objectives
