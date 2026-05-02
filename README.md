@@ -447,3 +447,509 @@ Example folder structure:
   pwm/
   refs/
   config/
+
+3. Journal / Notes / Text Workspace
+
+The journal is a lightweight text workspace for field notes and project documentation.
+
+Planned capabilities:
+
+create notes
+edit text files
+save timestamped entries
+write project logs
+create quick observations
+use CardKB for text entry
+optionally support simple sketch/touch notes later
+
+Example use cases:
+
+wiring notes
+lab observations
+sensor test notes
+debug logs
+project ideas
+quick reminders
+4. Wi-Fi Scanner / Network Viewer
+
+The Wi-Fi scanner is a passive observation tool.
+
+Planned capabilities:
+
+scan nearby Wi-Fi networks
+display SSID
+display RSSI
+display channel
+display encryption/security type
+display scan timestamp
+save scan results to SD
+review previous scan logs
+
+This feature is for passive viewing and logging only.
+
+5. BLE Scanner / Beacon Viewer
+
+The BLE scanner is a passive nearby-device discovery tool.
+
+Planned capabilities:
+
+scan nearby BLE devices
+display device name when available
+display device address/identifier
+display RSSI
+display scan timestamp
+save scan logs to SD
+review previous BLE observations
+
+This feature is for passive viewing and logging only.
+
+6. Portable Text Console / Command Terminal
+
+The console provides a typed local interface for power-user workflows.
+
+Planned capabilities:
+
+enter commands using CardKB
+view command output
+run internal system commands
+launch tools
+check system status
+scan I²C bus
+trigger Wi-Fi scan
+trigger BLE scan
+trigger camera capture
+inspect storage state
+inspect RTC status
+
+Example commands:
+
+help
+status
+time
+ls /logs
+scan wifi
+scan ble
+i2c scan
+capture
+uart open 115200
+gpio read
+pwm start 1000 50
+7. Config Editor / Profile Manager
+
+The configuration system stores device settings and user preferences.
+
+Planned capabilities:
+
+edit settings
+save profiles
+store UI preferences
+store keyboard behavior
+store module settings
+store camera settings
+store UART baud presets
+store PWM presets
+store sensor calibration values
+export/import configuration files
+
+Example config files:
+
+/config/system.json
+/config/ui.json
+/config/modules.json
+/config/uart_profiles.json
+/config/pwm_presets.json
+8. Offline Reference Tool
+
+The reference tool allows UI-MT to remain useful without internet access.
+
+Planned capabilities:
+
+view saved reference files
+view wiring notes
+view pinout references
+view supported module notes
+view command references
+view project documentation
+view troubleshooting checklists
+
+Example reference categories:
+
+/refs/
+  esp32_pinout.txt
+  cardkb_notes.txt
+  i2c_modules.txt
+  uart_reference.txt
+  gpio_reference.txt
+  pwm_reference.txt
+  wiring_notes.txt
+9. Camera Capture / Visual Logger
+
+The camera capture system uses an ESP32-CAM as a dedicated camera module.
+
+Planned capabilities:
+
+send capture command from main ESP32
+capture JPEG image on ESP32-CAM
+transfer image data to main ESP32
+save image to SD card
+create timestamped filenames
+store photos in /photos
+show capture status on TFT
+display last captured filename
+optionally store photo metadata
+
+Example filenames:
+
+/photos/IMG_2026-05-01_143208.jpg
+/photos/IMG_2026-05-01_143340.jpg
+
+Possible use cases:
+
+wiring snapshots
+lab bench documentation
+visual field notes
+project progress photos
+component documentation
+future QR/barcode experiments
+10. External I²C Modular Sensor Port / I²C Bus Scanner / Diagnostics
+
+The external I²C tool allows selected modules to be connected and read.
+
+Planned capabilities:
+
+scan external I²C bus
+display detected addresses
+match addresses to known supported modules
+allow user to select a module from a predefined list
+read live module data
+save sensor readings to SD
+display module information
+display basic wiring reminders
+show simple troubleshooting messages
+
+Example module selection menu:
+
+External I2C Modules
+  BME280  - Temp / Humidity / Pressure
+  BH1750  - Light Intensity
+  SCD41   - CO2 / Temp / Humidity
+  MLX90614 - IR Temperature
+  INA219  - Voltage / Current
+  MPU6050 - Accelerometer / Gyroscope
+  ADS1115 - External ADC
+  I2C Scan - Address Scanner
+
+Example scan output:
+
+I2C Scan Result:
+0x23 detected -> possible BH1750
+0x76 detected -> possible BME280
+0x68 detected -> possible MPU6050 or RTC
+
+The module list should be curated instead of fully open-ended. This keeps the interface simple and makes development realistic.
+
+11. UART Serial Terminal
+
+The UART terminal allows UI-MT to act as a small serial monitor/debug tool.
+
+Planned capabilities:
+
+select baud rate
+open UART session
+send typed commands using CardKB
+display received serial data
+save serial logs to SD
+support common baud presets
+show TX/RX status
+timestamp serial logs when enabled
+
+Example baud presets:
+
+9600
+19200
+38400
+57600
+115200
+230400
+921600
+
+Example storage:
+
+/uart/uart_2026-05-01_145500.txt
+12. GPIO / Logic Probe Basic Tool
+
+The GPIO probe tool provides basic digital signal checking.
+
+Planned capabilities:
+
+read digital HIGH/LOW state
+detect state changes
+display pin state
+optional buzzer alert on change
+simple pulse detection
+slow frequency estimate where practical
+save state logs to SD
+
+This is not intended to replace a real oscilloscope or logic analyzer. It is a simple field-checking tool for low-speed signals.
+
+Example screen:
+
+GPIO Probe
+Pin: GPIO34
+State: HIGH
+Last Change: 14:22:08
+Logging: ON
+13. Simple Signal Generator / PWM Tool
+
+The PWM tool provides basic signal output for testing.
+
+Planned capabilities:
+
+generate square-wave/PWM output
+select output pin
+set frequency
+set duty cycle
+start/stop output
+save presets
+display warning for voltage/current limits
+
+Example settings:
+
+PWM Output
+Pin: GPIO25
+Frequency: 1000 Hz
+Duty Cycle: 50%
+State: Running
+
+This feature is for low-voltage logic-level signal testing only.
+
+External I²C Module System
+
+The external I²C system is designed around a curated list of supported modules.
+
+Instead of trying to automatically support every I²C device, UI-MT will provide a selectable list of known modules. Each supported module can have its own screen, data formatting, logging format, and reference notes.
+
+Suggested Supported Modules
+Module	Purpose	Typical Data
+BME280	Environmental sensor	temperature, humidity, pressure
+BH1750	Light sensor	lux
+SCD41	CO2 sensor	CO2, temperature, humidity
+MLX90614	IR temperature sensor	object temp, ambient temp
+INA219	Power monitor	voltage, current, power
+MPU6050	Motion sensor	acceleration, gyroscope
+ADS1115	External ADC	analog voltage readings
+I²C Tool Modes
+
+Possible modes:
+
+Scan Bus
+Select Module
+Read Live Data
+Log Data
+View Module Info
+View Wiring Notes
+Save Reading
+
+Example module info screen:
+
+BME280
+Address: 0x76 / 0x77
+Interface: I2C
+Data: Temp, Humidity, Pressure
+Power: 3.3V recommended
+Pins: VIN, GND, SDA, SCL
+ESP32-CAM Camera Module Architecture
+
+The ESP32-CAM is used as a secondary subsystem.
+
+Recommended architecture:
+
+[Main ESP32]
+  - UI
+  - TFT display
+  - CardKB input
+  - SD card
+  - RTC
+  - file naming
+  - storage
+  - command control
+
+        UART
+
+[ESP32-CAM]
+  - camera initialization
+  - JPEG capture
+  - image transfer
+  - capture status
+Basic Capture Workflow
+User selects Camera Capture.
+Main ESP32 sends a capture command to ESP32-CAM.
+ESP32-CAM captures a JPEG image.
+ESP32-CAM sends file size and image data to the main ESP32.
+Main ESP32 writes the image to the SD card.
+Main ESP32 displays saved filename and status.
+
+Example protocol concept:
+
+Main ESP32 -> ESP32-CAM:
+CAPTURE
+
+ESP32-CAM -> Main ESP32:
+SIZE:48392
+<binary JPEG data>
+DONE
+
+The ESP32-CAM should not be treated as a simple dumb camera sensor. It should run its own firmware and send completed image data to the main ESP32.
+
+Storage Model
+
+The project uses two types of persistent storage.
+
+SD Card Storage
+
+Used for user-accessible files:
+
+notes
+logs
+scan results
+photos
+references
+UART logs
+GPIO logs
+sensor logs
+configuration exports
+
+Recommended folder structure:
+
+Internal Persistent Storage
+
+Used for lightweight device-specific settings:
+
+selected preferences
+boot state
+calibration values
+internal flags
+current profile
+last-used tool
+UI state
+
+This split keeps user data portable while preserving device-specific settings internally.
+
+Timekeeping and Logging
+
+The RTC is part of the locked hardware because time-aware data is fundamental to the project.
+
+Planned uses:
+
+dashboard clock
+timestamp journal entries
+timestamp Wi-Fi scans
+timestamp BLE scans
+timestamp sensor logs
+timestamp UART logs
+timestamp photos
+timestamp configuration changes
+create organized filenames
+
+Example timestamped files:
+
+/notes/note_2026-05-01_141500.txt
+/wifi/wifi_scan_2026-05-01_142000.csv
+/photos/IMG_2026-05-01_143208.jpg
+/uart/uart_2026-05-01_145500.txt
+
+Timekeeping is treated as a core system service, not an optional accessory.
+
+Input and Interface Model
+
+UI-MT uses a hybrid input model:
+
+touch screen for direct menu interaction
+CardKB keyboard for text entry and shortcuts
+stylus for touch precision
+console commands for fast technical workflows
+
+The CardKB replaces the previous two-button navigation concept.
+
+Input Roles
+Input Method	Role
+Touch	menus, selection, UI controls
+Stylus	precise touch, optional drawing/sketching
+CardKB	text entry, commands, filenames, shortcuts
+Console	advanced navigation and tool control
+
+
+The electrical tools are intended for low-voltage embedded development and simple debugging tasks.
+
+Software Architecture Goals
+
+The firmware should be modular and organized around clear responsibilities.
+
+
+Architecture Principles
+keep hardware drivers isolated from UI logic
+keep UI screens separate from backend services
+avoid monolithic application code
+define ownership of each peripheral clearly
+keep storage paths predictable
+use simple file formats where possible
+design tools as independent modules
+make future expansion possible without destabilizing the base system
+prioritize reliability over feature quantity
+Design Priorities
+
+The project follows these priorities:
+
+Reliability
+Usability
+Clear modular architecture
+Offline-first usefulness
+Storage and data integrity
+Responsive UI
+Keyboard-friendly workflows
+Practical electronics utility
+Safe low-voltage operation
+Expandability after stable integration
+
+This project favors a smaller polished system over a larger unstable one.
+
+
+UI-MT is not intended to be:
+
+a smartphone replacement
+a general-purpose Linux handheld
+a full cyberdeck computer
+a hacking device
+a wireless attack platform
+a high-speed lab instrument
+a professional oscilloscope
+a professional logic analyzer
+a professional signal generator
+a cloud-dependent device
+
+The purpose is to build a compact, understandable, useful embedded handheld terminal for electronics, logging, references, and modular field tools.
+
+Vision
+
+UI-MT is a personal embedded systems project built around the idea of useful, focused technology.
+
+The project combines:
+
+handheld computing
+embedded systems
+local storage
+real hardware interfaces
+field notes
+wireless observation
+modular sensors
+camera logging
+serial debugging
+simple electronics tools
+
+The long-term goal is to create a small, practical, self-contained device that feels like a real engineering companion: something that can sit on a workbench, go into a backpack, help with hardware debugging, store notes, read sensors, capture quick images, and provide offline references.
+
+UI-MT should feel like a modern DIY version of an older dedicated handheld tool: focused, tactile, useful, and built with purpose.
+
+License
+
+This project is licensed under the MIT License.
