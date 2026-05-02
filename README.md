@@ -1,41 +1,6 @@
 # Universal Interface Multi-Tool (UI-MT)
 
-![Status](https://img.shields.io/badge/status-planning%20%2F%20prototype-orange)
-![Platform](https://img.shields.io/badge/platform-ESP32-blue)
-![UI](https://img.shields.io/badge/interface-TFT%20Touch%20%2B%20CardKB-purple)
-![Storage](https://img.shields.io/badge/storage-microSD-green)
-![Clock](https://img.shields.io/badge/timekeeping-RTC-lightgrey)
-![License](https://img.shields.io/badge/license-MIT-brightgreen)
-
 A compact ESP32-based handheld terminal and electronics multi-tool with touch input, keyboard input, local storage, camera capture, wireless scanning, external I²C module support, UART debugging, GPIO probing, and basic signal generation.
-
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Design Inspiration](#design-inspiration)
-- [Locked Scope](#locked-scope)
-  - [Official Objective List](#official-objective-list)
-  - [Excluded From Current Scope](#excluded-from-current-scope)
-- [Hardware](#hardware)
-  - [Locked Hardware Set](#locked-hardware-set)
-  - [Hardware Roles](#hardware-roles)
-- [Target Device Definition](#target-device-definition)
-- [Core Features](#core-features)
-- [External I²C Module System](#external-i²c-module-system)
-- [ESP32-CAM Camera Module Architecture](#esp32-cam-camera-module-architecture)
-- [Storage Model](#storage-model)
-- [Timekeeping and Logging](#timekeeping-and-logging)
-- [Input and Interface Model](#input-and-interface-model)
-- [Electrical Tooling Scope](#electrical-tooling-scope)
-- [Software Architecture Goals](#software-architecture-goals)
-- [Design Priorities](#design-priorities)
-- [Development Roadmap](#development-roadmap)
-- [Current Status](#current-status)
-- [Non-Goals](#non-goals)
-- [Vision](#vision)
-- [License](#license)
 
 ---
 
