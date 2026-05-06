@@ -1,6 +1,6 @@
 # Universal Interface Multi-Tool (UI-MT)
 
-A compact ESP32-based handheld terminal and electronics multi-tool with touch input, keyboard input, local storage, wireless scanning, external I²C module support, UART debugging, GPIO probing, and basic signal generation.
+A compact ESP32-based handheld terminal and electronics multi-tool with touch input, keyboard input, local storage, wireless scanning, external I²C module support, UART debugging, GPIO probing, AD9833-based waveform generation, and basic ESP32 PWM output.
 
 ---
 
@@ -20,6 +20,7 @@ UI-MT is designed around a practical and finishable hardware platform:
 - buzzer feedback
 - external I²C expansion port
 - UART/GPIO/PWM utility functions
+- AD9833 waveform generator module
 - battery-powered operation
 
 The project focuses on building a stable base system first, then expanding into modular tools that are useful for real hardware work.
@@ -65,7 +66,8 @@ UI-MT is now re-locked as an ESP32-based handheld terminal and electronics multi
 - external I²C sensor modules
 - UART debugging
 - GPIO probing
-- simple PWM/square-wave output
+- AD9833 waveform generation
+- simple ESP32 PWM/square-wave output
 
 ---
 
@@ -117,9 +119,9 @@ The current project scope includes the following objectives:
 
     A simple GPIO probing tool for reading digital HIGH/LOW states, detecting state changes, checking simple pulses, and observing basic logic behavior.
 
-12. **Simple Signal Generator / PWM Tool**
+12. **AD9833 Signal Generator / PWM Tool**
 
-    A basic output tool for generating square-wave/PWM signals with selectable frequency and duty cycle for simple testing and experimentation.
+    A basic signal output tool using an AD9833 module for sine, triangle, and square-wave generation, plus ESP32 PWM output for simple logic-level square-wave testing.
 
 ---
 
@@ -139,7 +141,8 @@ The following are intentionally excluded from the current version:
 - IR transmission
 - advanced logic analyzer features
 - high-speed oscilloscope functions
-- advanced waveform generation
+- high-precision lab-grade signal generation
+- high-power signal output
 - SDR functionality
 - full scripting engine
 - smartphone-style app ecosystem
@@ -166,7 +169,9 @@ The hardware for the current version is defined as:
 - power circuit / battery system
 - external I²C expansion port for modular sensors
 - exposed UART interface for serial terminal mode
-- exposed GPIO input/output pins for probing and PWM output
+- exposed GPIO input pins for probing
+- exposed ESP32 PWM output pin for simple square-wave testing
+- AD9833 waveform generator module for dedicated signal generation
 
 The previous 2-button input system has been removed from the official hardware direction. Keyboard input through the CardKB replaces the need for dedicated navigation buttons.
 
@@ -193,7 +198,8 @@ The main ESP32 is responsible for:
 - I²C module selection and scanning
 - UART terminal operation
 - GPIO probing
-- PWM/signal output
+- ESP32 PWM output
+- AD9833 control over SPI
 
 The main ESP32 is the central controller of the UI-MT system.
 
@@ -214,7 +220,7 @@ It is used for:
 - references
 - sensor readings
 - UART terminal output
-- GPIO/PWM tool screens
+- GPIO/PWM/signal generator tool screens
 
 The touch panel provides direct menu navigation, selection, and interaction with on-screen controls.
 
@@ -233,6 +239,7 @@ It is used for:
 - typing UART commands
 - navigating menus with key shortcuts
 - editing configuration values
+- entering signal generator frequency and waveform settings
 
 This changes UI-MT from a simple touchscreen gadget into a small handheld terminal.
 
@@ -252,6 +259,7 @@ It is used for:
 - UART logs
 - GPIO logs
 - PWM presets
+- AD9833 signal presets
 - configuration exports
 - offline reference files
 
@@ -307,7 +315,7 @@ The goal is not to support every possible I²C device automatically. Instead, UI
 
 ---
 
-### UART / GPIO / PWM Interface
+### UART / GPIO / Signal Output Interface
 
 UI-MT should expose a small external interface for electronics utility functions.
 
@@ -317,11 +325,43 @@ Possible pins/functions:
 - UART RX
 - GND
 - GPIO probe input
-- GPIO output
-- PWM/square-wave output
+- ESP32 PWM/square-wave output
+- AD9833 waveform output
 - optional 3.3V reference output
 
 These pins should be clearly labeled and protected where appropriate.
+
+---
+
+### AD9833 Waveform Generator Module
+
+The AD9833 module is the dedicated waveform-generation hardware for UI-MT.
+
+It is used for:
+
+- sine-wave output
+- triangle-wave output
+- square-wave output
+- frequency-controlled test signals
+- saved waveform presets
+- simple electronics experiments and signal injection at safe low levels
+
+The ESP32 controls the AD9833 through SPI. The AD9833 output should be treated as a low-power signal output, not a power driver.
+
+Recommended AD9833 UI settings:
+
+- waveform type: sine, triangle, square
+- frequency value
+- start/stop output
+- preset save/load
+- output warning screen
+
+Important limitations:
+
+- output amplitude depends on the AD9833 module design
+- output is not meant to directly drive motors, speakers, relays, or high-current loads
+- external amplification or buffering would be needed for stronger output
+- this is not intended to replace a professional function generator
 
 ---
 
@@ -337,9 +377,10 @@ The power system is responsible for:
 - powering the SD module
 - powering the RTC
 - powering the CardKB
+- powering the AD9833 module
 - powering external low-current sensor modules
 
-The power system should be stable enough to support the display, storage, keyboard, sensors, and utility interfaces without brownouts.
+The power system should be stable enough to support the display, storage, keyboard, sensors, AD9833 module, and utility interfaces without brownouts.
 
 ---
 
@@ -347,7 +388,7 @@ The power system should be stable enough to support the display, storage, keyboa
 
 UI-MT is currently defined as:
 
-> A compact ESP32-based handheld terminal and electronics multi-tool with touch input, keyboard input, SD storage, RTC timekeeping, buzzer feedback, passive Wi-Fi/BLE scanning, external I²C sensor support, UART debugging, GPIO probing, and simple PWM signal generation.
+> A compact ESP32-based handheld terminal and electronics multi-tool with touch input, keyboard input, SD storage, RTC timekeeping, buzzer feedback, passive Wi-Fi/BLE scanning, external I²C sensor support, UART debugging, GPIO probing, AD9833 waveform generation, and simple ESP32 PWM output.
 
 This definition replaces earlier broader concepts that attempted to include too many advanced or unnecessary features at once.
 
@@ -387,6 +428,8 @@ Planned capabilities:
 - save scan results
 - save sensor readings
 - save serial terminal output
+- save GPIO logs
+- save signal generator presets
 - organize files by tool type
 - support predictable folder paths
 
@@ -401,6 +444,7 @@ Example folder structure:
   sensors/
   uart/
   gpio/
+  signal/
   pwm/
   refs/
   config/
@@ -488,7 +532,8 @@ Planned capabilities:
 - inspect RTC status
 - open UART terminal
 - read GPIO state
-- start/stop PWM output
+- start/stop ESP32 PWM output
+- configure AD9833 waveform output
 
 Example commands:
 
@@ -503,6 +548,10 @@ i2c scan
 uart open 115200
 gpio read
 pwm start 1000 50
+sig sine 1000
+sig triangle 500
+sig square 2000
+sig stop
 ```
 
 ---
@@ -519,7 +568,8 @@ Planned capabilities:
 - store keyboard behavior
 - store module settings
 - store UART baud presets
-- store PWM presets
+- store ESP32 PWM presets
+- store AD9833 signal presets
 - store sensor calibration values
 - export/import configuration files
 
@@ -531,6 +581,7 @@ Example config files:
 /config/modules.json
 /config/uart_profiles.json
 /config/pwm_presets.json
+/config/signal_presets.json
 ```
 
 ---
@@ -548,6 +599,7 @@ Planned capabilities:
 - view command references
 - view project documentation
 - view troubleshooting checklists
+- view AD9833 usage notes
 
 Example reference categories:
 
@@ -559,6 +611,7 @@ Example reference categories:
   uart_reference.txt
   gpio_reference.txt
   pwm_reference.txt
+  ad9833_reference.txt
   wiring_notes.txt
 ```
 
@@ -670,21 +723,48 @@ Logging: ON
 
 ---
 
-### 12. Simple Signal Generator / PWM Tool
+### 12. AD9833 Signal Generator / PWM Tool
 
-The PWM tool provides basic signal output for testing.
+The signal generator tool provides basic signal output for testing and experimentation.
+
+This tool has two output modes:
+
+1. **AD9833 waveform mode**
+   - sine wave
+   - triangle wave
+   - square wave
+   - frequency-controlled output
+   - preset save/load
+
+2. **ESP32 PWM mode**
+   - logic-level square-wave/PWM output
+   - selectable frequency
+   - selectable duty cycle
+   - start/stop output
+   - preset save/load
 
 Planned capabilities:
 
-- generate square-wave/PWM output
-- select output pin
+- select AD9833 or ESP32 PWM mode
+- select waveform type in AD9833 mode
 - set frequency
-- set duty cycle
+- set duty cycle for PWM mode
 - start/stop output
 - save presets
 - display warning for voltage/current limits
+- show output pin information
 
-Example settings:
+Example AD9833 settings:
+
+```text
+Signal Generator
+Mode: AD9833
+Waveform: Sine
+Frequency: 1000 Hz
+Output: Enabled
+```
+
+Example ESP32 PWM settings:
 
 ```text
 PWM Output
@@ -694,7 +774,7 @@ Duty Cycle: 50%
 State: Running
 ```
 
-This feature is for low-voltage logic-level signal testing only.
+This feature is for low-voltage signal testing only. It is not intended to drive high-current loads or replace professional signal-generation equipment.
 
 ---
 
@@ -741,6 +821,69 @@ Pins: VIN, GND, SDA, SCL
 
 ---
 
+## Signal Generator System
+
+The signal generator system is built around the AD9833 module and the ESP32's built-in PWM capability.
+
+### AD9833 Mode
+
+The AD9833 module is used when UI-MT needs a dedicated waveform output.
+
+Supported waveform targets:
+
+- sine wave
+- triangle wave
+- square wave
+
+Suggested controls:
+
+- waveform type
+- frequency
+- output enable/disable
+- preset save/load
+- output warning screen
+
+Suggested preset examples:
+
+```text
+/signal/presets.json
+  1000Hz_sine
+  500Hz_triangle
+  2000Hz_square
+```
+
+### ESP32 PWM Mode
+
+ESP32 PWM mode is used for simple digital square-wave or PWM output.
+
+Suggested controls:
+
+- output pin
+- frequency
+- duty cycle
+- start/stop
+- preset save/load
+
+This mode is useful for simple logic-level tests, LED dimming experiments, buzzer experiments, and low-voltage embedded testing.
+
+### Output Safety
+
+Both AD9833 and ESP32 PWM outputs should be treated as low-power signals.
+
+Do not connect the outputs directly to:
+
+- motors
+- relays
+- speakers
+- solenoids
+- high-current loads
+- high-voltage circuits
+- unknown external systems
+
+Use proper buffering, protection, or amplification if stronger output is needed.
+
+---
+
 ## Storage Model
 
 The project uses two types of persistent storage.
@@ -756,6 +899,8 @@ Used for user-accessible files:
 - UART logs
 - GPIO logs
 - sensor logs
+- PWM presets
+- AD9833 signal presets
 - configuration exports
 
 Recommended folder structure:
@@ -769,6 +914,7 @@ Recommended folder structure:
   sensors/
   uart/
   gpio/
+  signal/
   pwm/
   refs/
   config/
@@ -813,6 +959,7 @@ Example timestamped files:
 /wifi/wifi_scan_2026-05-01_142000.csv
 /uart/uart_2026-05-01_145500.txt
 /gpio/gpio_2026-05-01_150000.txt
+/signal/signal_preset_2026-05-01_151000.json
 ```
 
 Timekeeping is treated as a core system service, not an optional accessory.
@@ -850,6 +997,7 @@ Ctrl + I  -> I2C scan
 Ctrl + U  -> UART terminal
 Ctrl + G  -> GPIO probe
 Ctrl + P  -> PWM tool
+Ctrl + F  -> AD9833 signal generator
 ```
 
 ---
@@ -865,13 +1013,14 @@ UI-MT includes a small set of electronics utility tools.
 - UART serial terminal
 - GPIO digital state reading
 - basic pulse/state-change detection
-- simple PWM/square-wave output
+- ESP32 PWM/square-wave output
+- AD9833 sine/triangle/square-wave output
 
 ### Not Included
 
 - oscilloscope replacement
 - high-speed logic analyzer
-- arbitrary waveform generator
+- professional arbitrary waveform generator
 - RF test equipment
 - high-voltage measurement
 - high-current output
@@ -918,6 +1067,8 @@ src/
     gpio_tool.h
     pwm_tool.cpp
     pwm_tool.h
+    ad9833.cpp
+    ad9833.h
     uart_tool.cpp
     uart_tool.h
     i2c_bus.cpp
@@ -948,6 +1099,8 @@ src/
     gpio_service.h
     pwm_service.cpp
     pwm_service.h
+    signal_generator_service.cpp
+    signal_generator_service.h
 
   ui/
     screens/
@@ -964,6 +1117,7 @@ src/
       uart_screen.cpp
       gpio_screen.cpp
       pwm_screen.cpp
+      signal_generator_screen.cpp
 ```
 
 ### Architecture Principles
@@ -1063,8 +1217,9 @@ This project favors a smaller polished system over a larger unstable one.
 - UART serial terminal
 - GPIO probe mode
 - state-change detection
-- basic PWM output
-- PWM presets
+- ESP32 PWM output
+- AD9833 waveform output
+- signal generator presets
 - logging where useful
 
 ### Phase 8 — Refinement
@@ -1092,6 +1247,7 @@ Current project status:
 - CardKB keyboard added as the primary text input device
 - external I²C modular sensor port added
 - UART/GPIO/PWM utility tools added
+- AD9833 waveform generator added
 - local web portal removed from current objective list
 
 The next major step is hardware bring-up and testing each core module individually before combining them into the full UI-MT system.
@@ -1133,10 +1289,11 @@ The project combines:
 - modular sensors
 - serial debugging
 - GPIO probing
-- simple signal generation
+- ESP32 PWM output
+- AD9833 waveform generation
 - offline references
 
-The long-term goal is to create a small, practical, self-contained device that feels like a real engineering companion: something that can sit on a workbench, go into a backpack, help with hardware debugging, store notes, read sensors, and provide offline references.
+The long-term goal is to create a small, practical, self-contained device that feels like a real engineering companion: something that can sit on a workbench, go into a backpack, help with hardware debugging, store notes, read sensors, generate basic test signals, and provide offline references.
 
 UI-MT should feel like a modern DIY version of an older dedicated handheld tool: focused, tactile, useful, and built with purpose.
 
