@@ -172,6 +172,7 @@ The hardware for the current version is defined as:
 - exposed GPIO input pins for probing
 - exposed ESP32 PWM output pin for simple square-wave testing
 - AD9833 waveform generator module for dedicated signal generation
+![Alt text](https://github.com/VictorGranado/UI-MT_redefined/blob/a4071cc243dc67ee17c861a7bdd33255dee64afe/WhatsApp%20Image%202026-05-24%20at%2019.44.26.jpeg)
 
 The previous 2-button input system has been removed from the official hardware direction. Keyboard input through the CardKB replaces the need for dedicated navigation buttons.
 
