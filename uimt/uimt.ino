@@ -121,3 +121,25 @@ void updateRTCtoLocalTime(struct tm* timeinfo) {
 
   Serial.println("RTC updated with Local Time.");
 }
+
+// This function takes the LOCAL time structure and writes it to hardware registers
+void updateRTCtoLocalTime(struct tm* timeinfo) {
+  Serial.println("Writing Local Time to RTC Hardware...");
+
+  myRTC.setClockMode(false); // Set to 24h mode for easier writing
+
+  // timeinfo->tm_year is years since 1900 (e.g., 124 for 2024)
+  // Your library wants offset from 2000 (e.g., 24)
+  myRTC.setYear(timeinfo->tm_year - 100);
+
+  // tm_mon is 0-11, your lib wants 1-12
+  myRTC.setMonth(timeinfo->tm_mon + 1);
+
+  myRTC.setDate(timeinfo->tm_mday);
+  myRTC.setDoW(timeinfo->tm_wday == 0 ? 7 : timeinfo->tm_wday); // Convert Sunday 0 to 7 if needed
+  myRTC.setHour(timeinfo->tm_hour);
+  myRTC.setMinute(timeinfo->tm_min);
+  myRTC.setSecond(timeinfo->tm_sec);
+
+  Serial.println("RTC updated with Local Time.");
+}
