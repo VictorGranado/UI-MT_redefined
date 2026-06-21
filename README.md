@@ -2,7 +2,6 @@
 
 A compact ESP32-based handheld terminal and electronics multi-tool with touch input, keyboard input, local storage, wireless scanning, external I²C module support, UART debugging, GPIO probing, AD9833-based waveform generation, and basic ESP32 PWM output.
 
-https://chatgpt.com/share/6a36f9e0-8d78-83e8-bc14-c1f1f9c9fe4b
 ---
 
 ## Overview
